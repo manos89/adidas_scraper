@@ -27,7 +27,7 @@ ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 CONCURRENT_REQUESTS = 1
-LOG_ENABLED = False
+LOG_ENABLED = True
 # LOG_LEVEL = logging.ERROR
 
 # Configure a delay for requests for the same website (default: 0)
