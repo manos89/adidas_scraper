@@ -11,3 +11,5 @@ db = client[mongo_db]
 
 results = db["adidas"].find().distinct("size_chart_link")
 print(results)
+results = db["adidas"].find().distinct("id_model")
+print(len(results))

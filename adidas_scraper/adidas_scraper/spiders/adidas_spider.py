@@ -54,7 +54,9 @@ class AdidasSpider(scrapy.Spider):
     size_url = "https://www.adidas.com/api/products/{0}/availability?sitePath=us"
 
     def start_requests(self):
-        keywords = ["men", "women", "kids", "back_to_school", "accessories"]
+        # keywords = ["men", "women", "kids", "back_to_school", "accessories"]
+        keywords = ["shoes", "sneakers", "socks", "swim", "basketball", "football", "sports", "running", "golf",
+                    "tracksuits", "new", "tennis", "workout", "weightlifting"]
         for keyword in keywords:
             yield scrapy.Request(self.first_url.format(keyword, str(0)), callback=self.parse, meta={"keyword": keyword,
                                                                                                     "page": 0})
