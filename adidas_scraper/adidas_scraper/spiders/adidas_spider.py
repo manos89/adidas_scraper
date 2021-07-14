@@ -16,20 +16,6 @@ def collect_men_bottoms(response):
     return my_dict
 
 
-def collect_size_m_tops(response):
-    rows = response.selector.css("div.size_chart_table > table > tbody > tr")
-    my_dict = {}
-    fields = rows[0].css("th::text").extract()[1:]
-    print(fields)
-    for row in rows[1:]:
-        size = row.css("td ::text").extract_first()
-        print(size)
-        my_dict[size] = {}
-        columns = row.css("td ::text").extract()[1:]
-        print(columns)
-        for i in range(0, len(columns)):
-            my_dict[size][fields[i + 1].replace(u'\xa0', u' ')] = columns[i].replace(u'\xa0', u' ')
-    return my_dict
 
 
 def collect_shoes(response):
@@ -54,9 +40,16 @@ class AdidasSpider(scrapy.Spider):
     size_url = "https://www.adidas.com/api/products/{0}/availability?sitePath=us"
 
     def start_requests(self):
+        yield scrapy.Request("https://www.adidas.com/us", callback=self.parse_first)
+
+    def parse_first(self, response):
         # keywords = ["men", "women", "kids", "back_to_school", "accessories"]
-        keywords = ["shoes", "sneakers", "socks", "swim", "basketball", "football", "sports", "running", "golf",
-                    "tracksuits", "new", "tennis", "workout", "weightlifting"]
+        # keywords = ["shoes", "sneakers", "socks", "swim", "basketball", "football", "sports", "running", "golf",
+        #             "tracksuits", "new", "tennis", "workout", "weightlifting", "girls-back_to_school"]
+        # keywords = ["women-tops"]
+        links = response.selector.css("ul > li > a::attr(href)").extract()
+        keywords = [link.replace("/us/", "") for link in links if link.startswith("/us/")]
+        print(keywords)
         for keyword in keywords:
             yield scrapy.Request(self.first_url.format(keyword, str(0)), callback=self.parse, meta={"keyword": keyword,
                                                                                                     "page": 0})
